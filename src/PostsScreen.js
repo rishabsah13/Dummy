@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-
+import { AuthContext } from './components/context';
 
 const PostsScreen = ({ dispatch, isLoggedIn }) => {
     const [posts, setPosts] = useState([]);
@@ -12,6 +12,7 @@ const PostsScreen = ({ dispatch, isLoggedIn }) => {
         navigation.navigate("LoginScreen")
     };
 
+    const { signOut } = React.useContext(AuthContext)
     const fetchPosts = async () => {
         try {
             const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
@@ -29,7 +30,7 @@ const PostsScreen = ({ dispatch, isLoggedIn }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <Button title="Logout" onPress={handleLogout} />
+            <Button title="Logout" onPress={() => { signOut() }} />
             {posts.map((post) => (
                 <View key={post.id} style={styles.post}>
                     <Text style={styles.title}>{post.title}</Text>

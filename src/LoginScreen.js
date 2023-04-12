@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Button } from 'react-native';
+import { View, TextInput, Text, StyleSheet, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import { AuthContext } from './components/context';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const LoginScreen = ({ dispatch }) => {
     const navigation = useNavigation()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
+    const handleLogin = (email, password) => {
         // authenticate user with API here
         // if authentication is successful, dispatch the LOGIN action
+        signIn(email, password)
         navigation.navigate("PostsScreen")
     };
 
+    const { signIn } = React.useContext(AuthContext)
     return (
         <View style={styles.container}>
             <TextInput
@@ -22,6 +25,7 @@ const LoginScreen = ({ dispatch }) => {
                 value={email}
                 onChangeText={setEmail}
                 autoCapitalize="none"
+                autoComplete='off'
             />
             <TextInput
                 style={styles.input}
@@ -30,7 +34,14 @@ const LoginScreen = ({ dispatch }) => {
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            <Button title="Login" onPress={handleLogin} />
+            {/*  // <TouchableOpacity
+            //     onPress={
+            //         () => handleLogin(email, password)}
+            //     style={{ backgroundColor: 'black', width: 100, height: 40, justifyContent: "center", alignItems: "center", margin: 20, borderRadius: 10 }} >
+
+            //     <Text style={{ color: "white" }} >Login</Text>
+    // </TouchableOpacity>*/}
+            <Button title="Login" onPress={() => handleLogin(email, password)} />
         </View>
     );
 };
@@ -41,6 +52,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
+        backgroundColor: 'white'
     },
     input: {
         borderWidth: 1,
@@ -48,6 +60,8 @@ const styles = StyleSheet.create({
         padding: 10,
         marginVertical: 10,
         width: '100%',
+        backgroundColor: '#fefefe',
+        borderRadius: 10
     },
 });
 
